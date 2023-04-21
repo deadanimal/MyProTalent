@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
+use App\Models\Talent;
 use Illuminate\Http\Request;
 
-class ServiceController extends Controller
+class TalentController extends Controller
 {
-    public function list_services(Request $request)
+    public function list_talents(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -15,36 +15,36 @@ class ServiceController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $services = Service::all();
-            return view('service.staff_list', compact('services'));
+            $talents = Talent::all();
+            return view('talent.staff_list', compact('talents'));
         } else {
 
         }
     }
 
-    public function detail_service(Request $request)
+    public function detail_talent(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $service_id = (int) $request->route('service_id');
+        $talent_id = (int) $request->route('talent_id');
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $service = Service::find($service_id);
-            return view('service.staff_detail', compact('service'));
+            $talent = Talent::find($talent_id);
+            return view('talent.staff_detail', compact('talent'));
         } else if ($profile_type == 'employee') {
-            $service = Service::where([
-                ['id', '=', $service_id],
-                ['service_id', '=', $profile->service->id]
+            $talent = Talent::where([
+                ['id', '=', $talent_id],
+                ['talent_id', '=', $profile->talent->id]
             ]);
-            return view('service.service_detail', compact('service'));
+            return view('talent.talent_detail', compact('talent'));
         } else {
 
         }
     }
 
-    public function create_service(Request $request)
+    public function create_talent(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -52,7 +52,7 @@ class ServiceController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $service = Service::create([
+            $talent = Talent::create([
                 
             ]);
         } else {
@@ -62,7 +62,7 @@ class ServiceController extends Controller
         return back();
     }
 
-    public function update_service(Request $request)
+    public function update_talent(Request $request)
     {
 
         $user = $request->user();
@@ -70,16 +70,16 @@ class ServiceController extends Controller
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $service_id = (int) $request->route('service_id');
+        $talent_id = (int) $request->route('talent_id');
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $service = Service::find($service_id);
-            $service->update([]);
+            $talent = Talent::find($talent_id);
+            $talent->update([]);
         } else if ($profile_type == 'employee') {
-            $service = Service::where([
-                ['id', '=', $service_id],
+            $talent = Talent::where([
+                ['id', '=', $talent_id],
             ])->first();
-            $service->update([]);
+            $talent->update([]);
         } else {
 
         }    

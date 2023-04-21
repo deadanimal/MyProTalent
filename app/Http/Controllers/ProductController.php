@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ServiceController extends Controller
+class ProductController extends Controller
 {
-    public function list_services(Request $request)
+    public function list_products(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -15,36 +15,36 @@ class ServiceController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $services = Service::all();
-            return view('service.staff_list', compact('services'));
+            $products = Product::all();
+            return view('product.staff_list', compact('products'));
         } else {
 
         }
     }
 
-    public function detail_service(Request $request)
+    public function detail_product(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $service_id = (int) $request->route('service_id');
+        $product_id = (int) $request->route('product_id');
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $service = Service::find($service_id);
-            return view('service.staff_detail', compact('service'));
+            $product = Product::find($product_id);
+            return view('product.staff_detail', compact('product'));
         } else if ($profile_type == 'employee') {
-            $service = Service::where([
-                ['id', '=', $service_id],
-                ['service_id', '=', $profile->service->id]
+            $product = Product::where([
+                ['id', '=', $product_id],
+                ['product_id', '=', $profile->product->id]
             ]);
-            return view('service.service_detail', compact('service'));
+            return view('product.product_detail', compact('product'));
         } else {
 
         }
     }
 
-    public function create_service(Request $request)
+    public function create_product(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -52,7 +52,7 @@ class ServiceController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $service = Service::create([
+            $product = Product::create([
                 
             ]);
         } else {
@@ -62,7 +62,7 @@ class ServiceController extends Controller
         return back();
     }
 
-    public function update_service(Request $request)
+    public function update_product(Request $request)
     {
 
         $user = $request->user();
@@ -70,16 +70,16 @@ class ServiceController extends Controller
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $service_id = (int) $request->route('service_id');
+        $product_id = (int) $request->route('product_id');
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $service = Service::find($service_id);
-            $service->update([]);
+            $product = Product::find($product_id);
+            $product->update([]);
         } else if ($profile_type == 'employee') {
-            $service = Service::where([
-                ['id', '=', $service_id],
+            $product = Product::where([
+                ['id', '=', $product_id],
             ])->first();
-            $service->update([]);
+            $product->update([]);
         } else {
 
         }    
